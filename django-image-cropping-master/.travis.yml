@@ -1,0 +1,20 @@
+language: python
+cache: pip
+python:
+  - 2.7
+  - 3.5
+
+before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 10 # give xvfb some time to start
+install:
+  - pip install -U tox
+script:
+  - tox -r
+env:
+  - TOXENV=django18
+  - TOXENV=django19
+notifications:
+  email: false
+sudo: false

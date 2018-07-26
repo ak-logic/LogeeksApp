@@ -1,0 +1,18 @@
+{% extends 'transaction/default_template.html' %}
+
+{% block title %}Confirming Transaction{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="alert alert-success" role="alert">
+        <h4 class="text-center">Request successfully sent! See your <b>Notifications</b> for Tutor's response</h4>
+    </div>
+    <h2>{{ transaction_number }} is your Transaction Number</h2>
+    <p>Going with the Tutor's charge per hour = {{ tutor_charge_per_hour }}</p>
+    <h1>Total Tuition: <b>N{{ total_tuition }}</b></h1>
+    <h1>Total Transport fare: <b>N{{ total_transport_fare }}</b></h1>
+    <h1>Total amount due: <b>N{{ total_amount_due }}</b></h1>
+
+    <a class="btn btn-success btn-sm" href="/transaction/{{ transaction_number }}/payment/checkout/">Checkout</a>
+</div>
+{% endblock %}

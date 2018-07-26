@@ -1,0 +1,37 @@
+{% extends "tutor/default_template.html" %}
+
+{% block title %}Tutor Sign-in{% endblock %}
+
+{% block content %}
+
+    <div class="container" style="background: white; border: 1px solid cornflowerblue; border-radius: 4px; overflow: hidden; width: 310px; margin: 30px auto;">
+        <div class="page-header">
+            <h3>Tutor Login</h3>
+        </div>
+
+        {% if error_message %}
+            <div class="alert alert-danger fade in" role="alert">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <p>{{error_message}}!</p>
+            </div>
+	    {% endif %}
+
+        <form action="{% url 'tutor:authenticating' %}" method="POST">
+            {% csrf_token %}
+            <label for="username"><i class="glyphicon glyphicon-user"></i> Username: </label><br>
+            <input autofocus class="form-control" type="text" name="username" id="username" maxlength="7" placeholder="Tutor Number" {% if submited_username %} required value="{{ submited_username }}" {% endif %}>
+            <br>
+            <label for="password"><i class="glyphicon glyphicon-lock"></i> Password: </label><br>
+            <input class="form-control" type="password" name="password" id="password" placeholder="Password" required>
+            <br>
+            <input type="hidden" value="{{ next_url }}" name="next" id="next">
+            <button class="btn btn-success btn-md" type="submit" name="signIn"><span><i class="glyphicon glyphicon-off"></i> Login</span></button>
+        </form>
+        {% if error_message %}
+            <br>
+            <a class="btn btn-warning" href="{% url 'tutor:tutor_password_reset' %}">Reset password</a>
+        {% endif %}
+        <br><br>
+    </div>
+
+{% endblock %}

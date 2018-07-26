@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles %}
+{% load static %}
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="">
+    <meta name="description" content="Logeeks 'A'-Tutors">
+
+	<title>Home | Logeeks 'A'-Tutors (Scientific)</title>
+
+	<link href="{% static 'homepage/images/icon.png' %}" rel="icon" type="image/png">
+    <link rel="stylesheet" type="text/css" href="{% static 'homepage/bootstrap/css/font-awesome.css' %}">
+    {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'homepage/bootstrap/css/bootstrap-theme.css'%}"{% endcomment %}>
+    <link rel="stylesheet" type="text/css" href="{% static 'homepage/css/logeeksatutors.css' %}">
+    <link rel="stylesheet" href="{% static 'homepage/bootstrap/css/bootstrap.css' %}" type="text/css">
+    <script src="{% static 'homepage/js/logeekstutors.js' %}"></script>
+    <script src="{% static 'homepage/bootstrap/jquery/jquery.js' %}"></script>
+    <script src="{% static 'homepage/bootstrap/js/bootstrap.js' %}"></script>
+    <style>
+        .student_button {
+            background-color: {{ request.user.student.choice_color }};
+            {% if request.user.student.choice_color.upper == "#FFFFFF" or request.user.student.choice_color.upper == "WHITE" or request.user.student.choice_color.upper == "#F7F7F7" %}
+                color: black;
+            {% else %}
+                color: white;
+            {% endif %}
+            text-shadow: 1px;
+            border: 1px solid black;
+        }
+        .student_color{
+            {% if request.user.student.choice_color.upper == "#FFFFFF" or request.user.student.choice_color.upper == "WHITE" or request.user.student.choice_color.upper == "#F7F7F7" %}
+                color: black;
+            {% else %}
+                color: white;
+            {% endif %}
+            background-color: {{ request.user.student.choice_color }};
+        }
+    </style>
+</head>
+
+<body style="background-color: rgba(0,0,0,0.1);">
+    <nav class="nav nav-justified" style="padding-bottom: 10em;">
+        <div class="navbar-fixed-top" style="background-color: white; border-bottom: 2px solid lightgray;">
+            <div class="col-xs-12 col-sm-4 col-sm-offset-4">
+                <a href=""><img src="{% static 'homepage/images/logo.png' %}" class="img-responsive center-block"  style="padding-top: 7px; padding-bottom: 7px"></a>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-3 col-md-offset-1 center-block"  style="padding-top: 3%;">
+                <form action="/client/search/" name="search_form" id="search_form" class="form-inline text-center" style="padding-bottom: 4px;" method="GET">
+                    <label for="client_query" class="sr-only">Search here:</label>
+                    <input class="input-sm" type="search" id="client_query" name="client_query" placeholder="Search keywords here" required>
+{#                    <span class="fa fa-search form-control-feedback"></span>#}
+                    <input class="btn btn-primary btn-sm" type="submit" value="Search">
+                </form>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <noscript>
+            <div class="alert alert-danger">
+                <h4 class="text-center">Please enable JavaScript in order to have the webpage function properly.</h4>
+            </div>
+        </noscript>
+    </div>
+
+    <div class="container" style="padding-top: 2%;">
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-5 col-md-offset-0 col-lg-4 col-lg-offset-1 col-xl-4 col-xl-offset-2" style="padding-bottom: 90px;">
+                <div class="row">
+                    {% if request.user.student %}
+                    <div class="col-xs-12 col-sm-8 col-md-8 student_color">
+                    {% else %}
+                    <div class="col-xs-12 col-sm-8 col-md-8" style="background-color: #008CCC;">
+                    {% endif %}
+                        {% if request.user.student %}
+                            <a href="/student/dashboard/">
+                                <div class="rectangle-tile student_color" data-toggle="tooltip"  title="Return to Student Dashboard">
+                                    <p class="text-center"><i class="fa fa-dashboard fa-4x student_color" style="padding-top: 10%"></i></p>
+                                    <h3 class="intro-text text-center student_color">My Dashboard</h3>
+                                </div>
+                            </a>
+                        {% else %}
+                            <!-- Triggers the modal with the below a-tag content -->
+                            <a data-toggle="modal" data-target="#StudentPortalModal">
+                                <div class="rectangle-tile" style="background-color: #008CCC" data-toggle="tooltip"  title="Sign-in or Sign-up as a Student">
+                                    <p class="text-center"><i class="fa fa-user fa-4x" style="padding-top: 10%; color: white"></i></p>
+                                    <h3 class="intro-text text-center" style="color: white;">Student Portal</h3>
+                                </div>
+                            </a>
+                            <!-- Modal -->
+                            <div class="modal fade" id="StudentPortalModal" role="dialog">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button style="float:right;" type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+                                            <h2 class="modal-title text-primary">Student Portal</h2>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="container" style="border: 1px solid cornflowerblue; border-radius: 4px; width: 90%; margin: 20px auto;">
+                                                <br>
+                                                <form action="{% url 'student:authenticating' %}" method="POST">
+                                                    {% csrf_token %}
+                                                    <label for="username"><span><i class="fa fa-user"></i> Username:</span></label><br>
+                                                    <input class="form-control" type="text" name="username" id="username" maxlength="5" placeholder="Student I.D." required>
+                                                    <br>
+                                                    <label for="password"><span><i class="fa fa-lock"></i> Password:</span></label><br>
+                                                    <input class="form-control" type="password" name="password" id="password" placeholder="Enter password" required>
+                                                    <br>
+                                                    <input type="hidden" value="/student/dashboard/" name="next" id="next">
+                                                    <button class="btn btn-success btn-md" type="submit" name="signIn"><span><i class="fa fa-power-off"></i> Login</span></button>
+                                                </form>
+                                                <br>
+                                                <a class="btn btn-info" href="{% url 'student:student_sign_up' %}">Sign-up</a>
+                                                <br>
+                                                <br>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer label-primary">
+                                            <br>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4" style="background-color: white">
+                        <!-- Triggers the modal with the below a-tag content -->
+                        <a data-toggle="modal" data-target="#HireTutor">
+                            <div data-toggle="tooltip" title="Employ a Tutor" class="square-tile">
+                                <p class="text-center"><i class="fa fa-briefcase fa-4x" style="padding-top: 20%"></i></p>
+                                <h3 class="intro-text text-center" style="">Hire Tutor</h3>
+                            </div>
+                        </a>
+                        <!-- Modal -->
+                        <div class="modal fade" id="HireTutor" role="dialog">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h2 class="modal-title text-center text-primary">Hire a Tutor</h2>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container">
+                                            <br>
+                                            <div class="col-xs-12 col-sm-6 col-md-4">
+                                                <form action="{% url 'student:student_hire_tutor' %}" method="POST">
+                                                    {% csrf_token %}
+                                                    <fieldset>
+                                                        <div class="form-group">
+                                                            <label for="subject" class="h5"><b>Choose Subject:</b></label>
+                                                {#            'Mathematics', 'Mathematics'), ('English', 'English Language'), ('Biology', 'Biology'),#}
+                                                {#               ('Physics', 'Physics'), ('Chemistry', 'Chemistry'), ('Further Maths', 'Further Maths'),#}
+                                                {#               ('Computer Studies', 'Computer Studies'), ('Technical Drawing', 'Technical Drawing'))#}
+                                                            <select class="form-control" name="subject" id="subject" required>
+                                                                <option value="">Select a Subject</option>
+                                                                <option value="Biology">Biology</option>
+                                                                <option value="Chemistry">Chemistry</option>
+                                                                <option value="Computer Studies">Computer Studies</option>
+                                                                <option value="English">English Language</option>
+                                                                <option value="Further Maths">Further Mathematics</option>
+                                                                <option value="Mathematics">Mathematics</option>
+                                                                <option value="Physics">Physics</option>
+                                                                <option value="Technical Drawing">Technical Drawing</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="lga" class="h5"><b>Local Government Area (LGA) for the Tutorials:</b></label>
+                                                            <select name="lga" id="lga" class="form-control" required>
+                                                                <option value=''>Select Your LGA</option>
+                                                                <option value='apapa'>Apapa</option>
+                                                                <option value='ajah'>Ajah</option>
+                                                                <option value='bariga'>Bariga</option>
+                                                                <option value='ebute-meta'>Ebute Meta</option>
+                                                                <option value='eti-osa'>Eti-Osa</option>
+                                                                <option value='festac'>FESTAC</option>
+                                                                <option value='gbagada'>Gbagada</option>
+                                                                <option value='ibeju-lekki'>Ibeju-Lekki</option>
+                                                                <option value='ifako-ijaye'>Ifako-Ijaye</option>
+                                                                <option value='ikeja'>Ikeja</option>
+                                                                <option value='ikorodu'>Ikorodu</option>
+                                                                <option value='ikoyi-obalende'>Ikoyi -Obalende</option>
+                                                                <option value='ilupeju'>Ilupeju</option>
+                                                                <option value='ketu'>Ketu</option>
+                                                                <option value='kosofe'>Kosofe</option>
+                                                                <option value='lagos-island'>Lagos Island</option>
+                                                                <option value='lagos-mainland'>Lagos Mainland</option>
+                                                                <option value='magodo'>Magodo</option>
+                                                                <option value='onipanu'>Onipanu</option>
+                                                                <option value='oshodi-isolo'>Oshodi-Isolo</option>
+                                                                <option value='somolu'>Somolu</option>
+                                                                <option value='surulere'>Surulere</option>
+                                                                <option value='victoria-island'>Victoria-Island</option>
+                                                                <option value='Others'>Others</option>
+                                                            </select>
+                                                        </div>
+                                                        <input type="hidden" name="page_no" id="page_no" value="1">
+                                                        <input class="btn btn-success" type="submit" value="Submit">
+                                                    </fieldset>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer label-primary">
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="">
+                    <div class="col-xs-12">
+                        <!-- Triggers the modal with the below a-tag content -->
+                        <a data-toggle="modal" data-target="#FAQsModal">
+                            <div data-toggle="tooltip" title="Frequently Asked Questions" class="rectangle-tile" style="background-color: skyblue">
+                                <p class="text-center"><i class="fa fa-question fa-5x" style="padding-top: 12%; color: white"></i></p>
+                                <h3 class="intro-text text-center" style="color: white">FAQs</h3>
+                                <br>
+                            </div>
+                        </a>
+                        <!-- Modal -->
+                        <div class="modal fade" id="FAQsModal" role="dialog">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h2 class="modal-title text-center text-primary">Frequently Asked Questions</h2>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="">
+                                            <h2><abbr title="Frequently Asked Questions">FAQs</abbr></h2>
+                                            <p>
+                                                Below are some pertinent questions you may want to ask us.
+                                                These seem so far to be common/general questions which lingers in people's
+                                                mind to ask us. So we thought it necessary to put the answers at your
+                                                fingers' tip.
+                                            </p>
+                                            <div class="panel-group" id="accordion">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title">
+                                                            <a data-toggle="collapse" data-parent="#accordion"
+                                                               href="#collapse1">
+                                                                How much do we charge for tutorials?
+                                                            </a>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="collapse1" class="panel-collapse collapse in">
+                                                        <div class="panel-body">
+                                                            We do not have a fixed price tag for private (or home-based)
+                                                            Tutorials. Tutorial charge is on a per-hour level and the amount varies
+                                                            from Tutor to Tutor. Our charges are determined by four(4)
+                                                            parameters: Tutor's experience, rating, academic qualification
+                                                            and the Company's vouch on the Tutor.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title">
+                                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                                                                How can I hire a tutor?
+                                                            </a>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="collapse2" class="panel-collapse collapse">
+                                                        <div class="panel-body">
+                                                            To hire one of the Logeeks 'A'-Tutors, you must first have a
+                                                            Student account with us. You Login as a Student and then click
+                                                            'Hire Tutor' to get started. Or you can
+                                                            <a target="_blank" href="{% url 'student:student_sign_up' %}">
+                                                                sign up as a new Student.</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title">
+                                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+                                                                How Trusted are the Tutors?
+                                                            </a>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="collapse3" class="panel-collapse collapse">
+                                                        <div class="panel-body">
+                                                            Just be calm and have a sense of optimum safety!
+                                                            This we say because, each Tutor's details have been
+                                                            verified under our Tutor-Verification Programme, and we only
+                                                            send verified Tutors to our Clients.
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title">
+                                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">
+                                                                How can I join as Tutor?
+                                                            </a>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="collapse4" class="panel-collapse collapse">
+                                                        <div class="panel-body">
+                                                            You can write us a cover letter on paper or email it to us
+                                                            (at <a href="mailto: info@logeeksatutors.com">info@logeeksatutors.com</a>),
+                                                            attaching your <abbr title="Curriculum Vitae">C.V.</abbr> to
+                                                            the letter. You can learn more about how to contact us,
+                                                            by clicking the 'Contact us' on our Web
+                                                            <a href="">
+                                                                homepage.
+                                                            </a>
+                                                            We will definitely reply you!
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer label-primary">
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="background-color: white">
+                    <div class="col-xs-12 col-sm-4 col-md-4"  style="">
+                        <!-- Triggers the modal with the below a-tag content -->
+                        {% if request.user.tutor %}
+                            <a href="/tutor/dashboard/">
+                                <div class="square-tile" data-toggle="tooltip" title="Login as a Tutor" style="background-color: white">
+                                    <p class="text-center"><i class="fa fa-dashboard fa-3x" style="padding-top: 20%"></i></p>
+                                    <h3 class="intro-text text-center" style="">Dashboard</h3>
+                                </div>
+                            </a>
+                        {% else %}
+                            <a data-toggle="modal" data-target="#TutorLoginModal">
+                                <div class="square-tile" data-toggle="tooltip" title="Login as a Tutor" style="background-color: white">
+                                    <p class="text-center"><i class="fa fa-sign-in fa-3x" style="padding-top: 20%"></i></p>
+                                    <h3 class="intro-text text-center" style="">Tutors'</h3>
+                                </div>
+                            </a>
+                        {% endif %}
+                        <!-- Modal -->
+                        <div class="modal fade" id="TutorLoginModal" role="dialog">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times; </button>
+                                        <h2 class="modal-title text-center text-primary">Tutor Login</h2>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container" style="background: white; border: 1px solid cornflowerblue; border-radius: 4px; overflow: hidden; width: 18em; margin: 20px auto;">
+                                            <br>
+                                            <form action="{% url 'tutor:authenticating' %}" method="POST">
+                                                {% csrf_token %}
+                                                <label for="username"><i class="glyphicon glyphicon-user"></i> Username: </label><br>
+                                                <input class="form-control" type="text" name="username" id="username" maxlength="7" placeholder="Tutor Number" required>
+                                                <br>
+                                                <label for="password"><i class="glyphicon glyphicon-lock"></i> Password: </label><br>
+                                                <input class="form-control" type="password" name="password" id="password" placeholder="Enter Password" required>
+                                                <br>
+                                                <input type="hidden" value="/tutor/dashboard/" name="next" id="next">
+                                                <button class="btn btn-success btn-md" type="submit" name="signIn"><span><i class="glyphicon glyphicon-off"></i> Login</span></button>
+                                            </form>
+                                            <br>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer label-primary">
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-8" style="background-color: #008CCC">
+                        <!-- Triggers the modal with the below a-tag content -->
+                        <a data-toggle="modal" data-target="#ContactUsModal">
+                            <div data-toggle="tooltip" title="View Our Contact info" class="rectangle-tile" style="background-color: #008CCC">
+                                <p class="text-center"><i class="fa fa-phone fa-4x" style="padding-top: 8%; color: white"></i></p>
+                                <h3 class="intro-text text-center" style="color: white">Contact Us</h3>
+                            </div>
+                        </a>
+                        <!-- Modal -->
+                        <div class="modal fade" id="ContactUsModal" role="dialog">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h2 class="modal-title text-center text-primary">Contact Us</h2>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-8" style="padding: 15px;">
+                                                <h4><span><i class="fa fa-map-marker"></i>&nbsp</span><u>Address</u></h4>
+                                                <div class="">
+                                                    <h4><b>Head Office</b> - <small>18, Oluwole Street, Akoka, Lagos</small></h4>
+                                                    <div class="thumbnail" style="width:100%">
+                                                        <figure>
+                                                            <iframe width="100%" height="200em" frameborder="0" scrolling="no" marginheight="0" src="https://maps.google.com/maps?q=Oluwole Street Akoka, Lagos, &t=&z=16&ie=UTF8&iwloc=&output=embed" marginwidth="0"></iframe>
+                                                            <a class="addmaps"href="http://www.embedgooglemap.net"id="get-map-data">Oluwole Street Akoka, Lagos, </a>
+                                                        </figure>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-4" style="padding: 15px;">
+                                                <h4><span><i class="fa fa-phone"></i>&nbsp</span><u>Call</u></h4>
+                                                <p>
+                                                    <a href="tel:+2347014096832"><b>0701 409 6832</b></a>
+                                                    /
+                                                    <a href="tel:+2348172784571"><b>0817 278 4571</b></a>
+                                                </p>
+                                                <br>
+                                                <h4><span><i class="fa fa-envelope"></i>&nbsp</span><u>E-mail</u></h4>
+                                                <p>
+                                                    <a href="mailto: info@logeeksatutors.com"> info@logeeksatutors.com</a>
+                                                </p>
+                                                <br>
+                                                <h4><span><i class="fa fa-globe"></i>&nbsp</span><u>Web and Social</u></h4>
+                                                <p>
+                                                    <a href="">www.logeeksatutors.com</a>
+                                                </p>
+                                                <ul class="list-unstyled list-inline list-social-icons">
+                                                    <li>
+                                                        <a target="_blank" href="http://facebook.com/logeeksatutors" style="color: blue"><i class="fa fa-facebook-square fa-2x"></i></a>
+                                                    </li>
+                                                    <li>
+                                                        <a target="_blank" href="http://www.instagram.com/logeeksatutors1" style="color: saddlebrown"><i class="fa fa-instagram fa-2x"></i></a>
+                                                    </li>
+                                                    <li>
+                                                        <a target="_blank" href="http://twitter.com/logeeksatutors" style="color: cornflowerblue"><i class="fa fa-twitter-square fa-2x"></i></a>
+                                                    </li>
+                                                    <li>
+                                                        <a target="_blank" href="https://plus.google.com/u/0/106550624517671521485" style="color: red"><i class="fa fa-google-plus-square fa-2x"></i></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer label-primary">
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-5 col-md-offset-2 col-lg-4 col-lg-offset-2 col-xl-4 col-xl-offset-2" style="padding-bottom: 90px;">
+                <div class="row" style="">
+                    <div class="col-xs-12" style="background-color: #6B809B">
+                        <!-- Triggers the modal with the below a-tag content -->
+                        <a data-toggle="modal" data-target="#ReviewsModal">
+                            <div data-toggle="tooltip" title="Our Tutors' Rating" class="rectangle-tile" style="padding-top: 10%; padding-bottom: 5%">
+                                <p class="text-center"><i class="fa fa-comments fa-4x" style="color: white"></i></p>
+                                <h3 class="intro-text text-center" style="color: white">Reviews</h3>
+                            </div>
+                        </a>
+                        <!-- Modal -->
+                        <div class="modal fade" id="ReviewsModal" role="dialog">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h2 class="modal-title text-center text-primary">Tutors Review</h2>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row" style="padding: 10px">
+                                            <br>
+                                            <div class="well text-center">
+                                                <i style="color: black">
+                                                    We obtain absolute feedback from our Clients (Parents
+                                                    and Students), also with their consent to post such online.
+                                                </i>
+                                            </div>
+                                            <hr>
+                                            <div class="col-xs-12 col-sm-4" style="padding: 3px;">
+                                                <br>
+                                                <b><i style="color: coral;">Jul 2015</i></b>
+                                                <blockquote>
+                                                    <span><i class="fa fa-quote-left"></i> </span>
+                                                    <p style="font: initial">
+                                                        The Tutorials were fantastic! The Tutor had a very nice understanding
+                                                        on how to teach me. He taught me with a lot of confidence. And I
+                                                        improved in my academic performance ever since I enrolled in the
+                                                        Tutorials.
+                                                    </p>
+                                                    <small style="color: gray">Felix Awoyale. (Student from Akoka)</small>
+                                                </blockquote>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-4" style="padding: 3px;">
+                                                <br>
+                                                <b  style="color: forestgreen;"><i>Jul 2015</i></b>
+                                                <blockquote>
+                                                    <span><i class="fa fa-quote-left"></i> </span>
+                                                    <p style="font: initial">
+                                                        The Tutorials were fantastic! The Tutor had a very nice understanding
+                                                        on how to teach me. He taught me with a lot of confidence. And I
+                                                        improved in my academic performance ever since I enrolled in the
+                                                        Tutorials.
+                                                    </p>
+                                                    <small style="color: gray">Felix Awoyale. (Student from Akoka)</small>
+                                                </blockquote>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-4" style="padding: 3px;">
+                                                <br>
+                                                <b><i style="color: purple";>Jul 2015</i></b>
+                                                <blockquote>
+                                                    <span><i class="fa fa-quote-left"></i> </span>
+                                                    <p style="font: initial">
+                                                        The Tutorials were fantastic! The Tutor had a very nice understanding
+                                                        on how to teach me. He taught me with a lot of confidence. And I
+                                                        improved in my academic performance ever since I enrolled in the
+                                                        Tutorials.
+                                                    </p>
+                                                    <small style="color: gray">Felix Awoyale. (Student from Akoka)</small>
+                                                </blockquote>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer label-primary">
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="">
+                    <div class="col-xs-12 col-sm-6 col-md-6" style="background-color: #008CCC">
+                        <!-- Triggers the modal with the below a-tag content -->
+                        <a data-toggle="modal" data-target="#SubjectsOfferedModal">
+                            <div data-toggle="tooltip" title="See Subjects List" class="rectangle-tile" style="background-color: #008CCC">
+                                <p class="text-center"><i class="fa fa-book fa-4x" style="padding-top: 10%; color: white"></i></p>
+                                <h3 class="intro-text text-center" style="color: white;">Subjects Offered</h3>
+                            </div>
+                        </a>
+                        <!-- Modal -->
+                        <div class="modal fade" id="SubjectsOfferedModal" role="dialog">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h2 class="modal-title text-center text-primary">Subjects Offered</h2>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4>At the moment, we have Tutors for the listed subjects (and more):</h4>
+                                        <ul>
+                                            <li>Biology</li>
+                                            <li>Chemistry</li>
+                                            <li>Computer Studies</li>
+                                            <li>English Language</li>
+                                            <li>Further Mathematics</li>
+                                            <li>Mathematics</li>
+                                            <li>Physics</li>
+                                            <li>Technical Drawing</li>
+                                        </ul>
+                                    </div>
+                                    <div class="modal-footer label-primary">
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6" style="background-color: white">
+                        <!-- Triggers the modal with the below a-tag content -->
+                        <a data-toggle="modal" data-target="#AboutUsModal">
+                            <div data-toggle="tooltip" title="Know Us better" class="square-tile" style="">
+                                <p class="text-center"><i class="fa fa-info fa-4x" style="padding-top: 10%"></i></p>
+                                <h3 class="intro-text text-center" style="color: rgba(0,0,0,0.7);">About Us</h3>
+                            </div>
+                        </a>
+                        <!-- Modal -->
+                        <div class="modal fade" id="AboutUsModal" role="dialog">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h2 class="modal-title text-center text-primary">About Us</h2>
+                                    </div>
+                                    <div class="modal-body">
+                                        <br>
+                                        <div class="thumbnail">
+                                            <article id="description">
+                                                <div class="panel-title">
+                                                    <h4>&bullet; &nbsp;<u><b style="color: cornflowerblue">Who we are</b></u></h4>
+                                                </div>
+                                                <p style="padding: 2px; color: gray;">
+                                                    The Logeeks 'A'-Tutors (Scientific) is an Educational Foundation,
+                                                    that provides Professional Tutors (and governesses) to Students
+                                                    (of Basic and Secondary Schools, O ‘level and A ‘level Candidates also),
+                                                    upon demand. We have our specialization in Science -for effectiveness-
+                                                    to transform Students into mind-blowing Scholars; even Scientists.
+                                                    We do not teach our Students just to pass Examinations, beyond this,
+                                                    we make Education lively and lovely to make our Students
+                                                    <i>GET DEVELOPED!</i>
+                                                </p>
+                                            </article>
+                                        </div>
+                                            <br>
+                                        <div class="thumbnail">
+                                            <article id="description">
+                                                <div class="panel-title">
+                                                    <h4>&bullet; &nbsp;<u><b style="color: cornflowerblue">What we do</b></u></h4>
+                                                </div>
+                                                <p style="padding: 2px; color: gray;">
+                                                    Basically, we offer tutoring services to Students of Basic classes,
+                                                    Junior and Senior Secondary Students, either in the Tutorial center or
+                                                    private classes. Our services also extends to Candidates of
+                                                    <abbr title="West African Examination Council">WAEC</abbr>, NECO,
+                                                    JAMB and A'level Exams.
+                                                </p>
+                                            </article>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer label-primary">
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="">
+                    <div class="col-xs-12" style="background-color: skyblue">
+                        <!-- Triggers the modal with the below a-tag content -->
+                        <a data-toggle="modal" data-target="#LearningCentersModal">
+                            <div data-toggle="tooltip" title="Checkout Our Learning Outlets" class="rectangle-tile" style="">
+                                <p class="text-center"><i class="fa fa-map-marker fa-4x" style="color: white; padding-top: 10%; padding-bottom: 2%"></i></p>
+                                <h3 class="intro-text text-center" style="color: white">Learning Centers</h3>
+                            </div>
+                        </a>
+                        <!-- Modal -->
+                        <div class="modal fade" id="LearningCentersModal" role="dialog">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h2 class="modal-title text-center text-primary">Learning Centers</h2>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4>Walk into any of our Tutorial centers nearest to you today; find us at</h4>
+                                        <div class="container-fluid">
+                                            <div class="col-xs-12 col-sm-6 col-md-4">
+                                                <a target="_blank" href="#" style="color: gray;">
+                                                    <button style="border: 3px solid rgba(100,180,255,1); text-align: center; padding: 2%; margin: 1%; border-radius: 5px; background-color: white">
+                                                        <b>AKOKA, Lagos. (The Quantum)</b>
+                                                        <br><i class="text-success">Functional center</i>
+                                                    </button>
+                                                </a>
+                                                <a target="_blank" href="#" style="color: gray;">
+                                                    <button style="border: 3px solid rgba(100,180,255,1); text-align: center; padding: 2%; margin: 1%; border-radius: 5px; background-color: white">
+                                                        <b>SABO/YABA, Lagos. (Dynamo)</b><br><i>Under Construction</i>
+                                                    </button>
+                                                </a>
+                                                <a target="_blank" href="#" style="color: gray;">
+                                                    <button style="border: 3px solid rgba(100,180,255,1); text-align: center; padding: 2%; margin: 1%; border-radius: 5px; background-color: white">
+                                                        <b>IKOYI, Lagos (Genius Squad)</b><br><i>Under Construction</i>
+                                                    </button>
+                                                </a>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-md-4">
+                                                <a target="_blank" href="#" style="color: gray;">
+                                                    <button style="border: 3px solid rgba(100,180,255,1); text-align: center; padding: 2%; margin: 1%; border-radius: 5px; background-color: white">
+                                                        <b>FESTAC, Lagos. (Vectors) &nbsp;</b><br><i>Under Construction</i>
+                                                    </button>
+                                                </a>
+                                                <a target="_blank" href="#" style="color: gray;">
+                                                    <button style="border: 3px solid rgba(100,180,255,1); text-align: center; padding: 2%; margin: 1%; border-radius: 5px; background-color: white">
+                                                        <b>PALMGROOVE (Einstienic)</b><br><i>Under Construction</i>
+                                                    </button>
+                                                </a>
+                                                <a target="_blank" href="#" style="color: gray;">
+                                                    <button style="border: 3px solid rgba(100,180,255,1); text-align: center; padding: 2%; margin: 1%; border-radius: 5px; background-color: white">
+                                                        <b>IKEJA (In-Core)</b><br><i>Under Construction</i>
+                                                    </button>
+                                                </a>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-md-4">
+                                                <a target="_blank" href="#" style="color: gray;">
+                                                    <button style="border: 3px solid rgba(100,180,255,1); text-align: center; padding: 2%; margin: 1%; border-radius: 5px; background-color: white">
+                                                        <b>ONIPANU (Transformers)</b><br><i>Under Construction</i>
+                                                    </button>
+                                                </a>
+                                                <a target="_blank" href="#" style="color: gray;">
+                                                    <button style="border: 3px solid rgba(100,180,255,1); text-align: center; padding: 2%; margin: 1%; border-radius: 5px; background-color: white">
+                                                        <b>GBAGADA (Gamma-rays)</b><br><i>Under Construction</i>
+                                                    </button>
+                                                </a>
+                                                <a target="_blank" href="#" style="color: gray;">
+                                                    <button style="border: 3px solid rgba(100,180,255,1); text-align: center; padding: 2%; margin: 1%; border-radius: 5px; background-color: white">
+                                                        <b>MUSHIN (Geeks hub)</b><br><i>Under Construction</i>
+                                                    </button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer label-primary">
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer style="background-color: white">
+        <div class="container text-center">
+            <br>
+            <ul class="list-unstyled list-inline list-social-icons">
+                <li>
+                    <a target="_blank" href="http://facebook.com/logeeksatutors" style="color: blue"><i class="fa fa-facebook-square fa-2x"></i></a>
+                </li>
+                <li>
+                    <a target="_blank" href="http://www.instagram.com/logeeksatutors1" style="color: saddlebrown"><i class="fa fa-instagram fa-2x"></i></a>
+                </li>
+                <li>
+                    <a target="_blank" href="http://twitter.com/logeeksatutors" style="color: cornflowerblue"><i class="fa fa-twitter-square fa-2x"></i></a>
+                </li>
+                <li>
+                    <a target="_blank" href="https://plus.google.com/u/0/106550624517671521485" style="color: red"><i class="fa fa-google-plus-square fa-2x"></i></a>
+                </li>
+            </ul>
+            <br>
+            <script type="text/javascript">
+                <!--
+                function text_respond() {
+                    document.getElementById("email").style.fontSize = "20px";
+                }
+                function text_resize() {
+                    document.getElementById("email").style.fontSize = "inherit"
+                }
+                //-->
+            </script>
+            <noscript>
+                <div class="alert alert-danger">
+                    <h4 class="text-center">Enable JavaScript, please.</h4>
+                </div>
+            </noscript>
+            <div  id="email" onmouseenter="text_respond()" onmouseleave="text_resize()">
+                <a href="mailto:info@logeeksatutors.com"><i class="fa fa-envelope"></i> info@logeeksatutors.com</a>
+            </div>
+            <br>
+            <div>
+                <p class="fa fa-phone"></p>
+                <a href="tel:+2347014096832"><b style="font-size: larger;">0701 409 6832</b></a>
+                /
+                <a href="tel:+2348172784571"><b style="font-size: larger;">0817 278 4571</b></a>
+            </div>
+            <p></p>
+            <p style="color: gray;">&copy; Logeeks 'A'-Tutors (Scientific) 2017</p>
+            <p>All Rights Reserved.</p>
+            <br>
+        </div>
+
+    </footer>
+</body>
+
+</html>

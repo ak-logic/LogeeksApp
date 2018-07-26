@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles%}
+{% load static %}
+{% load thumbnail %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="">
+    <meta name="description" content="">
+
+    <title>Hire tutor | Logeeks 'A'-Tutors</title>
+
+    <link href="{% static 'homepage/images/icon.png' %}" rel="icon" type="image/png">
+    <link rel="stylesheet" type="text/css" href="{% static 'homepage/bootstrap/css/font-awesome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'homepage/bootstrap/css/bootstrap-theme.css' %}">
+    <link rel="stylesheet" href="{% static 'homepage/bootstrap/css/bootstrap.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'homepage/css/dashboard.css' %}" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'homepage/css/logeeksatutors.css' %}">
+    <script src="{% static 'homepage/js/logeekstutors.js' %}"></script>
+    <script src="{% static 'homepage/bootstrap/jquery/jquery.js' %}"></script>
+    <script src="{% static 'homepage/bootstrap/js/bootstrap.js' %}"></script>
+</head>
+
+<body style="background: white;">
+    <nav class="nav-justified"  style="padding-bottom: 5%">
+        <div class="navbar-fixed-top" style="background-color: white;">
+            <a href="{% url 'homepage:index' %}"><img src="{% static 'homepage/images/logo.png' %}" class="img-responsive center-block" style="padding-top: 7px; padding-bottom: 7px">
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <a class="btn btn-default" href="/student/select_tutor/">Re-select tutor</a>
+            <br><br>
+            <div class="alert alert-info alert-dismissable" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5>Query: <b>{{ subject }} Tutors in {{ lga }} Local Government.</b></h5>
+                <p>Results found: <b>{{ query_match }}</b></p>
+                <p>Page <b>{{ current_page }} (of {{ last_page }})</b></p>
+{#                <ul class="pagination">#}
+{#                {% for page_number in pages %}#}
+{#                    {% if page_number == current_page %}#}
+{#                        <li class="active"><a href="#">{{page_number}}</a></li>#}
+{#                    {% else %}#}
+{#                        <li><a href="#">{{ page_number }}</a></li>#}
+{#                    {% endif %}#}
+{#                {% endfor %}#}
+{#                </ul>#}
+            </div>
+        </div>
+
+        {% if query_match %}
+{#            <p>Number of pages:{{ pages }}</p>#}
+{#            <h3>Current Page: {{ current_page }}</h3>#}
+
+            <div class="row">
+                {% if current_page > first_page %}
+                    <div class="">
+                        <form method="POST" action="{% url 'student:student_hire_tutor' %}" style="">
+                            {% csrf_token %}
+                            <input type="hidden" name="subject" value="{{ subject }}">
+                            <input type="hidden" name="lga" value="{{ lga }}">
+                            <input type="hidden" id="page_no" name="page_no" value="{{ current_page |add:"-1" }}">
+                            <input class="btn btn-primary btn-sm pull-left" type="submit" style="margin-bottom: 2em; border-radius: 0px" value="Previous page ">
+                        </form>
+                    </div>
+                {% endif %}
+                {% if current_page < last_page %}
+                    <div class="">
+                        <form method="POST" action="{% url 'student:student_hire_tutor' %}" style="">
+                            {% csrf_token %}
+                            <input type="hidden" name="subject" value="{{ subject }}">
+                            <input type="hidden" name="lga" value="{{ lga }}">
+                            <input type="hidden" id="page_no" name="page_no" value="{{ current_page |add:"1" }}">
+                            <input class="btn btn-primary btn-sm pull-right" type="submit" style="margin-bottom: 2em;border-radius: 0px;" value="Next page">
+                        </form>
+                    </div>
+                {% endif %}
+                <br>
+            </div>
+
+{#            <form method="POST" action="{% url 'student:student_hire_tutor' %}">#}
+{#                {% csrf_token %}#}
+{#                <label for="subject"></label>#}
+{#                <input type="hidden" name="subject" value="{{ subject }}">#}
+{#                <label for="lga"></label>#}
+{#                <input type="hidden" name="lga" value="{{ lga }}">#}
+{#                <label for="page_no">Select a page</label>#}
+{#                <select name="page_no" id="page_no" class="form-control" style="width: 5em;" required>#}
+{#                    <option value="{{ current_page }}">{{ current_page }}</option>#}
+{#                    {% for page_no in pages %}#}
+{#                        {% if page_no !=  current_page %}#}
+{#                        <option value="{{ page_no }}">{{ page_no }}</option>#}
+{#                        {% endif %}#}
+{#                    {% endfor %}#}
+{#                </select>#}
+{#                <input type="submit" class="btn     btn-default" value="Go to page">#}
+{#            </form>#}
+{#            <br><br>#}
+
+            <div class="row">
+                {% for tutor in tutors_to_be_displayed %}
+                    <div class="col-sm-{{ col_sm_value }} col-md-{{ col_sm_value }}">
+                        <div class="thumbnail">
+                            <a class="">
+                                <h3>{{ tutor.user.first_name}}</h3><h3>{{ tutor.user.last_name }}</h3>
+                                <img src="{% thumbnail tutor.photo 300x300 box=tutor.cropping crop detail %}" class="img-thumbnail">
+    {#                                        <img src="{{ tutor.photo.url }}" width="80%" class="img-thumbnail">#}
+                                <h4 style="text-align:center">TUTOR {{ tutor.user.username }}</h4>
+                                <div class="">
+                                    <br>
+                                    <p></p>
+    {#                                    <p><small>Specialization: </small> {{ tutor.subject }} </p>#}
+                                    <button>
+                                        {% if tutor.gender == 'Male' %}
+                                            <i class="fa fa-male" style="color: cornflowerblue"></i>
+                                        {% elif tutor.gender == 'Female' %}
+                                            <i class="fa fa-female" style="color: orange"></i>
+                                        {% endif  %}
+                                    </button>
+                                    {% if tutor.experience > 1 %}
+                                        <p><small>Experience: </small>{{ tutor.experience }} years</p>
+                                    {% else %}
+                                        <p><small>Experience: </small>{{ tutor.experience }} year</p>
+                                    {% endif %}
+                                    <p><small>Qualification: </small>{{ tutor.qualification }} (of 5.0)</p>
+                                    {% if tutor.rating != 0.0 %}
+                                        <p><small>Rating: </small>{{ tutor.rating }} (of 5.0)</p>
+                                    {% else %}
+                                        <p><small>Rating: </small>None yet.</p>
+                                    {% endif %}
+                                    <p><small>Vouch: </small>{{ tutor.recommendation }} (of 5.0)</p>
+                                    <p><small>Worth: </small>(NG)<b>N{{ tutor.charge }} / hour</b></p>
+                                </div>
+
+
+                            </a>
+                            {% if tutor.availability > 0 %}
+                                <form method="POST" action="/transaction/initializing/">
+                                    {% csrf_token %}
+                                    <input type="hidden" id="hired_tutor_number" name="hired_tutor_number" value="{{ tutor.user.username }}">
+                                    <input class="btn btn-primary btn-sm" type="submit" value="Hire Tutor">
+                                </form>
+                            {% else %}
+                                <button class="btn btn-danger btn-sm" style="background-color:black; color: white">Not Available</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="row">
+                {% if current_page > first_page %}
+                    <div class="">
+                        <form method="POST" action="{% url 'student:student_hire_tutor' %}" style="">
+                            {% csrf_token %}
+                            <input type="hidden" name="subject" value="{{ subject }}">
+                            <input type="hidden" name="lga" value="{{ lga }}">
+                            <input type="hidden" id="page_no" name="page_no" value="{{ current_page |add:"-1" }}">
+                            <input class="btn btn-primary btn-sm pull-left" type="submit" style="margin-top: 2em; border-radius: 0px" value="Previous page ">
+                        </form>
+                    </div>
+                {% endif %}
+                {% if current_page < last_page %}
+                    <div class="">
+                        <form method="POST" action="{% url 'student:student_hire_tutor' %}" style="">
+                            {% csrf_token %}
+                            <input type="hidden" name="subject" value="{{ subject }}">
+                            <input type="hidden" name="lga" value="{{ lga }}">
+                            <input type="hidden" id="page_no" name="page_no" value="{{ current_page |add:"1" }}">
+                            <input class="btn btn-primary btn-sm pull-right" type="submit" style="margin-top: 2em;border-radius: 0px;" value="Next page">
+                        </form>
+                    </div>
+                {% endif %}
+                <br>
+            </div>
+
+        {% else %}
+            <hr><br>
+            <div class="text-center">
+                <h3 class="text text-muted">SORRY! Seems there's no <b>{{ subject }}</b> Tutor available in <b>{{ lga }}</b> at the moment.</h3>
+                <p>Why not
+                    <!-- Triggers the modal with the below a-tag content -->
+                    <a data-toggle="modal" data-target="#ContactUsModal">
+                        <button class="btn btn-info btn-sm">Contact us</button>
+                    </a>
+                    to make YOUR OWN booking.
+                </p>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="ContactUsModal" role="dialog">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h2 class="modal-title text-center text-primary">Contact Us</h2>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-8" style="padding: 15px;">
+                                    <h4><span><i class="fa fa-map-marker"></i>&nbsp</span><u>Address</u></h4>
+                                    <div class="">
+                                        <h4><b>Head Office</b> - <small>18, Oluwole Street, Akoka, Lagos</small></h4>
+                                        <div class="thumbnail" style="width:100%">
+                                            <figure>
+                                                <iframe width="100%" height="200em" frameborder="0" scrolling="no" marginheight="0" src="https://maps.google.com/maps?q=Oluwole Street Akoka, Lagos, &t=&z=16&ie=UTF8&iwloc=&output=embed" marginwidth="0"></iframe>
+                                                <a class="addmaps"href="http://www.embedgooglemap.net"id="get-map-data">Oluwole Street Akoka, Lagos, </a>
+                                            </figure>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4" style="padding: 15px;">
+                                    <h4><span><i class="fa fa-phone"></i>&nbsp</span><u>Call</u></h4>
+                                    <p>
+                                        <a href="tel:+2347014096832"><b>0701 409 6832</b></a>
+                                        /
+                                        <a href="tel:+2348172784571"><b>0817 278 4571</b></a>
+                                    </p>
+                                    <br>
+                                    <h4><span><i class="fa fa-envelope"></i>&nbsp</span><u>E-mail</u></h4>
+                                    <p>
+                                        <a href="mailto: info@logeeksatutors.com"> info@logeeksatutors.com</a>
+                                    </p>
+                                    <br>
+                                    <h4><span><i class="fa fa-globe"></i>&nbsp</span><u>Web and Social</u></h4>
+                                    <p>
+                                        <a href="">www.logeeksatutors.com</a>
+                                    </p>
+                                    <ul class="list-unstyled list-inline list-social-icons">
+                                        <li>
+                                            <a target="_blank" href="http://facebook.com/logeeksatutors" style="color: blue"><i class="fa fa-facebook-square fa-2x"></i></a>
+                                        </li>
+                                        <li>
+                                            <a target="_blank" href="http://www.instagram.com/logeeksatutors1" style="color: saddlebrown"><i class="fa fa-instagram fa-2x"></i></a>
+                                        </li>
+                                        <li>
+                                            <a target="_blank" href="http://twitter.com/logeeksatutors" style="color: cornflowerblue"><i class="fa fa-twitter-square fa-2x"></i></a>
+                                        </li>
+                                        <li>
+                                            <a target="_blank" href="https://plus.google.com/u/0/106550624517671521485" style="color: red"><i class="fa fa-google-plus-square fa-2x"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer label-primary">
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 thumbnail" style="padding: 3%">
+                <h3 class="text-info" style="font-family: 'Berlin Sans FB'">HINT:</h3>
+                <p>Try <a href="/student/select_tutor/">selecting a nearer LGA</a> to <b>{{ lga.title }}</b>.</p>
+            </div>
+            <div class="col-sm-4 thumbnail" style="padding: 3%">
+                <h3 class="text-info" style="font-family: 'Berlin Sans FB'">DID YOU KNOW?</h3>
+                <p>Try <a href="/student/select_tutor/">selecting a nearer LGA</a> to <b>{{ lga.title }}</b>.</p>
+            </div>
+            <div class="col-sm-4 thumbnail" style="padding: 3%">
+                <h3 class="text-info" style="font-family: 'Berlin Sans FB'">READ THIS</h3>
+                <p>Try <a href="/student/select_tutor/">selecting a nearer LGA</a> to <b>{{ lga.title }}</b>.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <br><br>
+
+    <footer style="background-color: white">
+        <div class="container text-center">
+            <br>
+            <ul class="list-unstyled list-inline list-social-icons">
+                <li>
+                    <a target="_blank" href="http://facebook.com/logeeksatutors" style="color: blue"><i class="fa fa-facebook-square fa-2x"></i></a>
+                </li>
+                <li>
+                    <a target="_blank" href="http://www.instagram.com/logeeksatutors1" style="color: saddlebrown"><i class="fa fa-instagram fa-2x"></i></a>
+                </li>
+                <li>
+                    <a target="_blank" href="http://twitter.com/logeeksatutors" style="color: cornflowerblue"><i class="fa fa-twitter-square fa-2x"></i></a>
+                </li>
+                <li>
+                    <a target="_blank" href="https://plus.google.com/u/0/106550624517671521485" style="color: red"><i class="fa fa-google-plus-square fa-2x"></i></a>
+                </li>
+            </ul>
+            <br>
+            <script type="text/javascript">
+                <!--
+                function text_respond() {
+                    document.getElementById("email").style.fontSize = "20px";
+                }
+                function text_resize() {
+                    document.getElementById("email").style.fontSize = "inherit"
+                }
+                //-->
+            </script>
+            <noscript>
+                <div class="alert alert-danger">
+                    <h4 class="text-center">Enable JavaScript, please.</h4>
+                </div>
+            </noscript>
+            <div  id="email" onmouseenter="text_respond()" onmouseleave="text_resize()">
+                <a href="mailto:info@logeeksatutors.com"><i class="fa fa-envelope"></i> info@logeeksatutors.com</a>
+            </div>
+            <br>
+            <div>
+                <p class="fa fa-phone"></p>
+                <a href="tel:+2347014096832"><b style="font-size: larger;">0701 409 6832</b></a>
+                /
+                <a href="tel:+2348172784571"><b style="font-size: larger;">0817 278 4571</b></a>
+            </div>
+            <p></p>
+            <p style="color: gray;">&copy; Logeeks 'A'-Tutors (Scientific) 2017</p>
+            <p>All Rights Reserved.</p>
+            <br>
+        </div>
+
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+/*Logeeks 'A'-Tutors (Scientific)*/
+/**/
+
+
+#tile {
+
+}
+
+.square-tile{
+height: 100%;
+width: 100%;
+font-family: 'Hp Simplified';
+border: none;
+border-radius: none;
+padding: 0%;
+}
+
+/*.rectangle-landscape{
+height: 500px;
+width: 300px;
+font-family: 'Hp Simplified';
+border: 2px solid gray;
+border-radius: none;
+padding: 2%;
+}
+*/
+.rectangle-tile{
+height: 60%;
+width: 100%;
+font-family: 'Hp Simplified';
+border: none;
+border-radius: none;
+padding: 0%;
+}

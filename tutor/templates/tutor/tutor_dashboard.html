@@ -1,0 +1,117 @@
+{% extends "tutor/default_template.html" %}
+{% load staticfiles%}
+{% load static %}
+{% load cropping %}
+{% load thumbnail %}
+
+{% block title %}Tutor {{ user }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h4 class="text-center">Tutor {{ user.username }} - {{ user.first_name }} {{ user.last_name }}</h4>
+        {% if tutor.is_visible %}
+            <div class="alert alert-success">
+                <p class="text-center">Your visibility is <b>On</b></p>
+            </div>
+        {% else %}
+            <div class="alert alert-danger">
+                <p class="text-center">Your have turned <b>Off</b> your visibility</p>
+            </div>
+        {% endif %}
+
+        <p class="text-center">Current Worth: <b>N{{ tutor.charge }}</b>/hour</p>
+    </div>
+
+    <div class="container-fluid">
+        <br>
+        <div class="row">
+            <div class="col-xs-12 col-sm-3 col-md-2 col-md-offset-2">
+                <div class="thumbnail">
+                    {% if tutor.photo %}
+                    <a href="{{ tutor.photo.url }}">
+                        <img src="{% thumbnail tutor.photo 300x300 box=tutor.cropping crop detail bw=True %}" class="img-responsive">
+                    </a>
+                    {% else %}
+                        <a href="{% static 'homepage/images/avatar.jpg' %}">
+                            <img src="{% static 'homepage/images/avatar.jpg' %}" class="img-responsive">
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-2">
+                <div class="thumbnail" style="height: auto">
+                    <h2 class="text-center"><span><i class="fa fa-bell-o fa-2x"></i></span></h2>
+                    <hr>
+                    <a href="#">
+                        <button class="btn btn-default btn-lg center-block">Notifications</button>
+                    </a>
+                    <h6><br></h6>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-2">
+                <div class="thumbnail" style="height: auto">
+                    <h2 class="text-center"><span><i class="fa fa-edit fa-2x"></i></span></h2>
+                    <hr>
+                    <a href="/tutor/profile/">
+                        <button class="btn btn-default btn-lg center-block">Edit profile</button>
+                    </a>
+                    <h6><br></h6>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-2">
+                <div class="thumbnail" style="height: auto">
+                    <h2 class="text-center"><span><i class="fa fa-archive fa-2x"></i></span></h2>
+                    <hr>
+                    <a href="/tutor/transaction_archive/">
+                        <button class="btn btn-default btn-lg center-block">Transactions</button>
+                    </a>
+                    <h6><br></h6>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-3 col-md-2 col-md-offset-2">
+                <div class="thumbnail" style="height: auto">
+                    <h2 class="text-center"><span><i class="fa fa-check-square-o fa-2x"></i></span></h2>
+                    <hr>
+                    <a href="#">
+                        <button class="btn btn-default btn-lg center-block">Tutor tips</button>
+                    </a>
+                    <h6><br></h6>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-2">
+                <div class="thumbnail" style="height: auto">
+                    <h2 class="text-center"><span><i class="fa fa-file-text-o fa-2x"></i></span></h2>
+                    <hr>
+                    <a href="#">
+                        <button class="btn btn-default btn-lg center-block">Lesson plan</button>
+                    </a>
+                    <h6><br></h6>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-2">
+                <div class="thumbnail" style="height: auto">
+                    <h2 class="text-center"><span><i class="fa fa-key fa-2x"></i></span></h2>
+                    <hr>
+                    <a href="/tutor/tutor_change_password/">
+                        <button class="btn btn-default btn-lg center-block">Set password</button>
+                    </a>
+                    <h6><br></h6>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-2">
+                <div class="thumbnail" style="height: auto;">
+                    <h2 class="text-center"><span><i class="fa fa-power-off fa-2x"></i></span></h2>
+                    <hr>
+                    <form method="POST" action="{% url 'tutor:tutor_sign_out' %}">
+                        {% csrf_token %}
+                        <input class="btn btn-danger btn-lg center-block" type="submit" value="Logout" id="sign_out" name="sign_out">
+                    </form>
+                    <h6><br></h6>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

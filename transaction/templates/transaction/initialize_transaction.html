@@ -1,0 +1,64 @@
+{% extends 'transaction/default_template.html' %}
+
+{% block title %}Transaction Initializing{% endblock %}
+
+{% block content %}
+    {% load thumbnail %}
+    <div class="container">
+        <h1 class="text-center">Are you sure you want to begin this transaction with Tutor {{ hired_tutor_number }}?</h1>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-lg-offset-2">
+    {#            <img src="{% thumbnail hired_tutor.photo 300x300 box=hired_tutor.cropping crop detail %}" class="img-thumbnail">#}
+
+                <img src="{% thumbnail hired_tutor.photo 300x300 box=hired_tutor.cropping crop detail %}" class="img-responsive img-thumbnail">
+
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <h1 style="color: darkslategray">{{ hired_tutor_user.first_name }} {{ hired_tutor_user.last_name }}</h1>
+                <h3>{{ hired_tutor.subject }} Tutor ({{ hired_tutor_number }})</h3>
+                <p>Experience: {{ hired_tutor.experience }} year{% if hired_tutor.experience > 1 %}s{% endif %}</p>
+                <p>Star Rating: {{ hired_tutor.rating }} (of 5 Stars)</p>
+                <p>Vouch: {{ hired_tutor.recommendation }} (of 5)</p>
+                <p>Academic Qualification: {{ hired_tutor.qualification }} (of 5)</p>
+                <h5>Worth: <b>N{{ tutor_charge_per_hour }} / hour</b></h5>
+                <a class="btn btn-danger btn-sm" href="/student/hire_tutor/">Cancel Transaction</a>
+            </div>
+        </div>
+        <div class="row text-center">
+            <form method="POST" action="/transaction/confirm/">
+                {% csrf_token %}
+                <input type="hidden" id="hired_tutor_number" name="hired_tutor_number" value="{{ hired_tutor_number }}">
+                <div class="col-xs-12 col-sm-8 col-md-8 col-lg-7 col-lg-offset-5 col-xl-7 col-xl-offset-5">
+                    <h1 class="text-center">Else, select your preferred choices below and submit.</h1>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-lg-offset-5 col-xl-3 col-xl-offset-5">
+                    <label for="num_of_days_per_week">How often a week?</label>
+                    <br>
+                    <select class="form-control" id="num_of_days_per_week" name="num_of_days_per_week" required>
+                        <option value="">Select an option</option>
+                        <option value="1">1 Day per week</option>
+                        <option value="2">2 Days per week</option>
+                        <option value="3">3 Days per week</option>
+                        <option value="4">4 Days per week</option>
+                        <option value="5">5 Days per week</option>
+                    </select>
+                    <br>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-md-offset-1 col-lg-3 col-lg-offset-1 col-xl-3 col-xl-offset-1">
+                    <label for="num_of_hours_per_day">How long per day?</label>
+                    <br>
+                    <select class="form-control" id="num_of_hours_per_day" name="num_of_hours_per_day" required>
+                        <option value="">Select an option</option>
+                        <option value="1">1 Hour</option>
+                        <option value="2">2 Hours</option>
+                        <option value="3">3 Hours</option>
+                        <option value="4">4 Hours</option>
+                    </select>
+                    <br>
+                    <input class="btn btn-success btn-sm" style="float: right" type="submit" value="Proceed">
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock%}

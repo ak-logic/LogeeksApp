@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="Django default" uuid="3009093c-3a60-4206-9e20-8af493d6119f">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <imported>true</imported>
+      <configured-by-url>true</configured-by-url>
+      <remarks>$PROJECT_DIR$/LOGEEKSWEBAPP/settings.py</remarks>
+      <auto-commit>false</auto-commit>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\h\Documents\LOGEEKSATUTORS\WEB\LOGEEKSWEBAPP\db.sqlite3</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="Django default2" uuid="d1272204-dc4f-4ddc-a52c-a4d0d8356225">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <imported>true</imported>
+      <remarks>$PROJECT_DIR$/LOGEEKSWEBAPP/settings.py</remarks>
+      <auto-commit>false</auto-commit>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\h\Documents\LOGEEKSATUTORS\WEB\LOGEEKSWEBAPP\db.sqlite3</jdbc-url>
+    </data-source>
+  </component>
+</project>

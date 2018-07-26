@@ -1,0 +1,159 @@
+{% extends "tutor/default_template.html" %}
+
+{% block title %} Tutor {{ user.username }} profile{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <br>
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-2 col-sm-4 col-md-4 col-lg-3 col-lg-offset-1 col-xl-4 col-xl-offset-2">
+                <div class="thumbnail">
+                    <img src="{{ tutor.photo.url }}" class="img-responsive img-thumbnail">
+                </div>
+            </div>
+            <div class="col-xs-10 col-xs-offset-2 col-sm-8 col-md-8 col-lg-7 col-lg-offset-1 col-xl-5">
+                <h1 style="color: darkslategray">{{ request.user.first_name }} {{ tutor.middle_name }} {{ user.last_name }}</h1>
+                <h3>{{ tutor.subject }} Tutor ({{ user.username }})</h3>
+                <h5>Availability: {{ availability }} (of 2)</h5>
+                <p>Experience: {{ tutor.experience }} year{% if tutor.experience > 1 %}s{% endif %}</p>
+                <p>Star Rating: {{ tutor.rating }} (of 5 Stars)</p>
+                <p>Vouch: {{ tutor.recommendation }} (of 5)</p>
+                <p>Academic Qualification: {{ tutor.qualification }} (of 5)</p>
+                <h5>Worth: <b>N{{ tutor.charge }} / hour</b></h5>
+                <a class="btn btn-primary btn-sm" href="/tutor/dashboard/">Dashboard</a>
+            </div>
+        </div>
+        <br><br><br>
+        <div class="center-block">
+            <form method="POST" action="/tutor/profile/">
+                {% csrf_token %}
+                <fieldset>
+                    <div class="row">
+                        <div class="col-xs-10 col-xs-offset-2 col-sm-6 col-md-6 col-lg-4 col-lg-offset-1 col-xl-4 col-xl-offset-2">
+                            <label for="lga1">First choice LGA</label>
+                            <br>
+                            <select class="form-control" type="text" id="lga1" name="lga1">
+                                <option value="{{ lga1 }}">Still {{ lga1.capitalize }}</option>
+                                <option value="apapa">apapa</option>
+                                <option value="ajah">ajah</option>
+                                <option value="bariga">bariga</option>
+                                <option value="ebute-meta">ebute-meta</option>
+                                <option value="eti-osa">eti-osa</option>
+                                <option value="festac">festac</option>
+                                <option value="gbagada">gbagada</option>
+                                <option value="ibeju-lekki">ibeju-lekki</option>
+                                <option value="ifako-ijaye">ifako-ijaye</option>
+                                <option value="ikeja">ikeja</option>
+                                <option value="ikorodu">ikorodu</option>
+                                <option value="ikoyi-obalende">ikoyi-obalende</option>
+                                <option value="ilupeju">ilupeju</option>
+                                <option value="ketu">ketu</option>
+                                <option value="kosofe">kosofe</option>
+                                <option value="lagos-island">lagos-island</option>
+                                <option value="lagos-mainland">lagos-mainland</option>
+                                <option value="magodo">magodo</option>
+                                <option value="onipanu">onipanu</option>
+                                <option value="oshodi-isolo">oshodi-isolo</option>
+                                <option value="somolu">somolu</option>
+                                <option value="surulere">surulere</option>
+                                <option value="victoria-island">victoria-island</option>
+                            </select>
+                            <br>
+                            <label for="lga2">Second choice LGA</label>
+                            <br>
+                            <select class="form-control" type="text" id="lga2" name="lga2">
+                                <option value="{{ lga2 }}">Still {{ lga2.capitalize }}</option>
+                                <option value="apapa">apapa</option>
+                                <option value="ajah">ajah</option>
+                                <option value="bariga">bariga</option>
+                                <option value="ebute-meta">ebute-meta</option>
+                                <option value="eti-osa">eti-osa</option>
+                                <option value="festac">festac</option>
+                                <option value="gbagada">gbagada</option>
+                                <option value="ibeju-lekki">ibeju-lekki</option>
+                                <option value="ifako-ijaye">ifako-ijaye</option>
+                                <option value="ikeja">ikeja</option>
+                                <option value="ikorodu">ikorodu</option>
+                                <option value="ikoyi-obalende">ikoyi-obalende</option>
+                                <option value="ilupeju">ilupeju</option>
+                                <option value="ketu">ketu</option>
+                                <option value="kosofe">kosofe</option>
+                                <option value="lagos-island">lagos-island</option>
+                                <option value="lagos-mainland">lagos-mainland</option>
+                                <option value="magodo">magodo</option>
+                                <option value="onipanu">onipanu</option>
+                                <option value="oshodi-isolo">oshodi-isolo</option>
+                                <option value="somolu">somolu</option>
+                                <option value="surulere">surulere</option>
+                                <option value="victoria-island">victoria-island</option>
+                            </select>
+                            <br>
+                            <label for="lga3">Third choice LGA</label>
+                            <br>
+                            <select class="form-control" type="text" id="lga3" name="lga3">
+                                <option value="{{ lga3 }}">Still {{ lga3.capitalize }}</option>
+                                <option value="apapa">apapa</option>
+                                <option value="ajah">ajah</option>
+                                <option value="bariga">bariga</option>
+                                <option value="ebute-meta">ebute-meta</option>
+                                <option value="eti-osa">eti-osa</option>
+                                <option value="festac">festac</option>
+                                <option value="gbagada">gbagada</option>
+                                <option value="ibeju-lekki">ibeju-lekki</option>
+                                <option value="ifako-ijaye">ifako-ijaye</option>
+                                <option value="ikeja">ikeja</option>
+                                <option value="ikorodu">ikorodu</option>
+                                <option value="ikoyi-obalende">ikoyi-obalende</option>
+                                <option value="ilupeju">ilupeju</option>
+                                <option value="ketu">ketu</option>
+                                <option value="kosofe">kosofe</option>
+                                <option value="lagos-island">lagos-island</option>
+                                <option value="lagos-mainland">lagos-mainland</option>
+                                <option value="magodo">magodo</option>
+                                <option value="onipanu">onipanu</option>
+                                <option value="oshodi-isolo">oshodi-isolo</option>
+                                <option value="somolu">somolu</option>
+                                <option value="surulere">surulere</option>
+                                <option value="victoria-island">victoria-island</option>
+                            </select>
+                            <br>
+                        </div>
+                        <div class="col-xs-10 col-xs-offset-2 col-sm-6 col-md-6 col-lg-4 col-lg-offset-2 col-xl-4 col-xl-offset-2">
+                            <label for="phone_number">Phone Number</label>
+                            <br>
+                            <input class="form-control" type="telephone" id="phone_number" name="phone_number" value="{{ phone_number }}">
+                            <br>
+                            <label for="address">Home Address</label>
+                            <br>
+                            <input class="form-control" type="text" id="address" name="address" value="{{ address }}">
+                            <br>
+                            {% if tutor.is_visible %}
+                                <label for="visibility">Edit visibility</label>
+                                <br>
+                                <select id="visibility" name="visibility" class="form-control">
+                                    <option value="True">Turn-on Visibility</option>
+                                    <option value="">Turn-off Visibility</option>
+                                </select>
+                                <br>
+                            {% else %}
+                                <label for="visibility">Edit visibility</label>
+                                <br>
+                                <select id="visibility" name="visibility" class="form-control">
+                                    <option value="">Turn-off Visibility</option>
+                                    <option value="True">Turn-on Visibility</option>
+                                </select>
+                                <br>
+                            {% endif %}
+                        </div>
+                        <input type="hidden" id="availability" name="availability" value="{{ availability }}">
+                    </div>
+                    <div class="row text-center">
+                        <br><br>
+                        <input class="btn btn-success" type="submit" value="update">
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <br>
+    </div>
+{% endblock %}

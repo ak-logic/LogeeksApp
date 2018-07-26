@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student notifications</title>
+</head>
+<body>
+<!-- {{ notifications_to_display.reverse }} -->
+<ul>
+{% for notification in notifications_to_display %}
+    {% if not notification.read_status %}
+        <li style="background-color: lightgray"><a target="_top" href="/student/transaction/{{ notification.related_transaction }}/">{{ notification.title }}</a></li>
+    {% else %}
+        <li><a target="_top" href="/student/transaction/{{ notification.related_transaction }}/">{{ notification.title }}</a></li>
+    {% endif %}
+{% endfor %}
+</ul>
+</body>
+</html>

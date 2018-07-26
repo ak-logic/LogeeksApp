@@ -1,0 +1,31 @@
+{% extends 'transaction/default_template.html' %}
+
+{% block title %}Checkout Payment for Tutorials{% endblock %}
+
+{% block content %}
+{% load thumbnail %}
+<div class="container">
+    {% if transaction == None %}
+        <h1 class="text-danger">Invalid Transaction!</h1>
+        <p>{{ transaction_number }} is an Invalid Transaction number.</p>
+    {% else %}
+        {% if student_can_view_transaction %}
+            <h1>Checkout Payment here!</h1>
+            <h3>Transaction: <b>{{ transaction_number }}</b></h3>
+            <br>
+
+            <form action="/student/dashboard/">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-primary btn-sm" value="Dashboard">
+            </form>
+
+        {% else %}
+            <div class="alert alert-dismissable alert-danger">
+                <p class="text-center">You do not have permission to view this Transaction!</p>
+                <p class="text-center">You do not have permission to view this Transaction!</p>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+
+{% endblock %}

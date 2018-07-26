@@ -1,0 +1,55 @@
+{% extends 'student/default_template.html' %}
+
+{% load staticfiles%}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %} Student {{ request.user.username }} {% endblock %}
+
+{#{% block page_header %}#}
+{#    Dashboard#}
+{#{% endblock %}#}
+
+{% block page_title_bar %}{% endblock %}
+
+{% block notification_badge %}
+    <span class="badge">{{ number_of_unread_notifications }}</span>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel" style="padding-top: 3%;background: linear-gradient(to bottom, {{ student.choice_color }}, white);">
+                <div class="thumbnail center-block" style="width: 80px; z-index: 300">
+                    {% if student.photo %}
+                        <a href="{% thumbnail student.photo 300x300 crop %}">
+                            <img src="{% thumbnail student.photo 300x300 crop bw=False %}" class="img-responsive">
+                        </a>
+                    {% else %}
+                        <a href="{% static 'homepage/images/avatar.jpg' %}">
+                            <img src="{% static 'homepage/images/avatar.jpg' %}" class="img-responsive">
+                        </a>
+                    {% endif %}
+                </div>
+                <h4 class="text-center">Student id: <b>{{ user.username }}</b></h4>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h1 class="text-info" style="font-family: 'Berlin Sans FB'">
+                        Did you know?
+                    </h1>
+                </div>
+                <div class="panel-body">
+                    <iframe src="{% url 'student:did_you_know_facts' %}" height="220px" width="100%"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

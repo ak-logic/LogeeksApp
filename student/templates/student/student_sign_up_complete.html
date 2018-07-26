@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles%}
+{% load static %}
+{% load thumbnail %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="">
+    <meta name="description" content="">
+
+    <title>Sign-up successful | Logeeks 'A'-Tutors</title>
+
+    <link href="{% static 'homepage/images/icon.png' %}" rel="icon" type="image/png">
+    <link rel="stylesheet" type="text/css" href="{% static 'homepage/bootstrap/css/font-awesome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'homepage/bootstrap/css/bootstrap-theme.css' %}">
+    <link rel="stylesheet" href="{% static 'homepage/bootstrap/css/bootstrap.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'homepage/css/dashboard.css' %}" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'homepage/css/logeeksatutors.css' %}">
+    <script src="{% static 'homepage/js/logeekstutors.js' %}"></script>
+    <script src="{% static 'homepage/bootstrap/jquery/jquery.js' %}"></script>
+    <script src="{% static 'homepage/bootstrap/js/bootstrap.js' %}"></script>
+</head>
+<body style="background-color: lightgray;">
+    <nav class="nav-justified"  style="padding-bottom: 5%">
+        <div class="navbar-fixed-top" style="background-color: white;">
+            <a href="{% url 'homepage:index' %}"><img src="{% static 'homepage/images/logo.png' %}" class="img-responsive center-block" style="padding-top: 7px; padding-bottom: 7px">
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="alert alert-dismissable alert-success">
+            <h4 class="text-center">Sign-up Successful! <b>{{ new_student_first_name }}</b>, check your email for your username (Student id)</h4>
+        </div>
+        <h3>Return to </h3><a class="btn btn-default btn-sm" href="{% url 'homepage:index' %}">Homepage</a> or <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#StudentPortalModal">Sign-in</a>
+        <!-- Modal -->
+        <div class="modal fade" id="StudentPortalModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button style="float:right;" type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+                        <h2 class="modal-title text-primary">Student Portal</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container" style="border: 1px solid cornflowerblue; border-radius: 4px; width: 90%; margin: 20px auto;">
+                            <br>
+                            <form action="{% url 'student:authenticating' %}" method="POST">
+                                {% csrf_token %}
+                                <label for="username"><span><i class="fa fa-user"></i> Username:</span></label><br>
+                                <input class="form-control" type="text" name="username" id="username" maxlength="5" placeholder="Student I.D." required>
+                                <br>
+                                <label for="password"><span><i class="fa fa-lock"></i> Password:</span></label><br>
+                                <input class="form-control" type="password" name="password" id="password" placeholder="Enter password" required>
+                                <br>
+                                <input type="hidden" value="/student/dashboard/" name="next" id="next">
+                                <button class="btn btn-success btn-md" type="submit" name="signIn"><span><i class="fa fa-power-off"></i> Login</span></button>
+                            </form>
+                            <br>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="modal-footer label-primary">
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<br><br>
+
+    <footer style="background-color: white">
+        <div class="container text-center">
+            <br>
+            <ul class="list-unstyled list-inline list-social-icons">
+                <li>
+                    <a target="_blank" href="http://facebook.com/logeeksatutors" style="color: blue"><i class="fa fa-facebook-square fa-2x"></i></a>
+                </li>
+                <li>
+                    <a target="_blank" href="http://www.instagram.com/logeeksatutors1" style="color: saddlebrown"><i class="fa fa-instagram fa-2x"></i></a>
+                </li>
+                <li>
+                    <a target="_blank" href="http://twitter.com/logeeksatutors" style="color: cornflowerblue"><i class="fa fa-twitter-square fa-2x"></i></a>
+                </li>
+                <li>
+                    <a target="_blank" href="https://plus.google.com/u/0/106550624517671521485" style="color: red"><i class="fa fa-google-plus-square fa-2x"></i></a>
+                </li>
+            </ul>
+            <br>
+            <script type="text/javascript">
+                <!--
+                function text_respond() {
+                    document.getElementById("email").style.fontSize = "20px";
+                }
+                function text_resize() {
+                    document.getElementById("email").style.fontSize = "inherit"
+                }
+                //-->
+            </script>
+            <noscript>
+                <div class="alert alert-danger">
+                    <h4 class="text-center">Enable JavaScript, please.</h4>
+                </div>
+            </noscript>
+            <div  id="email" onmouseenter="text_respond()" onmouseleave="text_resize()">
+                <a href="mailto:info@logeeksatutors.com"><i class="fa fa-envelope"></i> info@logeeksatutors.com</a>
+            </div>
+            <br>
+            <div>
+                <p class="fa fa-phone"></p>
+                <a href="tel:+2347014096832"><b style="font-size: larger;">0701 409 6832</b></a>
+                /
+                <a href="tel:+2348172784571"><b style="font-size: larger;">0817 278 4571</b></a>
+            </div>
+            <p></p>
+            <p style="color: gray;">&copy; Logeeks 'A'-Tutors (Scientific) 2017</p>
+            <p>All Rights Reserved.</p>
+            <br>
+        </div>
+
+    </footer>
+
+</body>
+</html>

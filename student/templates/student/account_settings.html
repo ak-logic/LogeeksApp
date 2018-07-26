@@ -1,0 +1,120 @@
+{% extends "student/default_template.html" %}
+{% load staticfiles%}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %} Student Account Settings {% endblock %}
+
+{% block page_header %}
+    Account Settings
+{% endblock %}
+
+{% block notification_badge %}
+    <span class="badge">{{ number_of_unread_notifications }}</span>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <table class="table table-responsive table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center">Item</th>
+                    <th>Option</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="thumbnail" style="width: 70px;">
+                            {% if student.photo %}
+                                <img src="{% thumbnail student.photo 300x300 crop bw=False %}" class="img-responsive">
+                            {% else %}
+                                <img src="{% static 'homepage/images/avatar.jpg' %}" class="img-responsive img-thumbnail">
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <form class="form-inline" action="{% url 'student:student_change_photo' %}" method="POST" id="profile_photo_change_form" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input id="new_profile_photo" name="new_profile_photo" type="file" required>
+                            </div>
+                            <input type="submit" class="btn student_button btn-xs" value="Update photo">
+                        </form>
+                        {% if student.photo %}
+                            <br>
+                            <form action="{% url 'student:student_remove_photo' %}" method="POST" id="profile_photo_delete_form" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="submit" class="btn btn-danger btn-xs" value="Remove photo">
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>Password</p>
+                    </td>
+                    <td>
+                        <a href="#" data-toggle="modal" data-target="#change_password" class="btn student_button btn-xs"><i class="fa fa-fw fa-key"></i> Change password</a>
+                        <!-- Modal -->
+                        <div class="modal fade" id="change_password" role="dialog">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header student_color">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h2 class="modal-title text-center student_color">Change password</h2>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container-fluid">
+                                            <div class="col-xs-12">
+                                                <iframe src="/student/student_change_password/" width="100%" height="400px" style="padding-top: 0px"></iframe>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer student_color">
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>Accent colour</p>
+                    </td>
+                    <td>
+                        <form id="choice_color_change_form" action="{% url 'student:student_change_color' %}" method="POST">
+                            {% csrf_token %}
+                            <br>
+                            <input type="color" id="choice_color" name="choice_color" placeholder="e.g pink">
+                            <button type="submit" class="btn student_button btn-xs">Change</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>Contact info</p>
+                    </td>
+                    <td>
+                        <form id="change_phone_number_form" action="/student/account_settings/" method="POST">
+                            {% csrf_token %}
+                            <br>
+                            <label for="phone_number">Phone number</label>
+                            <input type="tel" id="phone_number" class="form-control" name="phone_number" value="{{ student.phone_number }}">
+                            <br>
+                            <label for="home_address">Address</label>
+                            <input type="text" id="home_address" class="form-control" name="home_address" value="{{ student.home_address }}">
+                            <br>
+                            <input type="submit" class="btn student_button btn-xs" value="Update contact">
+                            <br>
+                            {{ location_form }}
+                            <br>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
