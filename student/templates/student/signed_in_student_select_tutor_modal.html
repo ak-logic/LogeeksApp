@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+    <html lang="en">
+    {% load staticfiles%}
+    {% load static %}
+    {% load thumbnail %}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="author" content="">
+        <meta name="description" content="">
+
+        <title>Select Tutor | Logeeks 'A'-Tutors</title>
+
+        <link href="{% static 'homepage/images/icon.png' %}" rel="icon" type="image/png">
+        <link rel="stylesheet" type="text/css" href="{% static 'homepage/bootstrap/css/font-awesome.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'homepage/bootstrap/css/bootstrap-theme.css' %}">
+        <link rel="stylesheet" href="{% static 'homepage/bootstrap/css/bootstrap.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'homepage/css/dashboard.css' %}" type="text/css">
+        <link rel="stylesheet" type="text/css" href="{% static 'homepage/css/logeeksatutors.css' %}">
+        <script src="{% static 'homepage/js/logeekstutors.js' %}"></script>
+        <script src="{% static 'homepage/bootstrap/jquery/jquery.js' %}"></script>
+        <script src="{% static 'homepage/bootstrap/js/bootstrap.js' %}"></script>
+        <style>
+            .student_button {
+                background-color: {{ request.user.student.choice_color }};
+                {% if request.user.student.choice_color.upper == "#FFFFFF" or request.user.student.choice_color.upper == "WHITE" or request.user.student.choice_color.upper == "#F7F7F7" %}
+                    color: black;
+                {% else %}
+                    color: white;
+                {% endif %}
+                text-shadow: 1px;
+                border: 1px solid black;
+            }
+            .student_color{
+                {% if request.user.student.choice_color.upper == "#FFFFFF" or request.user.student.choice_color.upper == "WHITE" or request.user.student.choice_color.upper == "#F7F7F7" %}
+                    color: black;
+                {% else %}
+                    color: white;
+                {% endif %}
+                background-color: {{ request.user.student.choice_color }};
+            }
+        </style>
+    </head>
+
+<body style="background: white">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <form target="_parent" action="{% url 'student:student_hire_tutor' %}" method="POST">
+                    {% csrf_token %}
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="subject" class="h5"><b>Choose Subject:</b></label>
+                {#            'Mathematics', 'Mathematics'), ('English', 'English Language'), ('Biology', 'Biology'),#}
+                {#               ('Physics', 'Physics'), ('Chemistry', 'Chemistry'), ('Further Maths', 'Further Maths'),#}
+                {#               ('Computer Studies', 'Computer Studies'), ('Technical Drawing', 'Technical Drawing'))#}
+                            <select class="form-control" name="subject" id="subject" required>
+                                <option value="">Select a Subject</option>
+                                <option value="Biology">Biology</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Computer Studies">Computer Studies</option>
+                                <option value="English">English Language</option>
+                                <option value="Further Maths">Further Mathematics</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Technical Drawing">Technical Drawing</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="lga" class="h5"><b>Local Government Area (LGA) for the Tutorials:</b></label>
+                            <select name="lga" id="lga" class="form-control" required>
+                                <option value=''>Select Your LGA</option>
+                                <option value='apapa'>Apapa</option>
+                                <option value='ajah'>Ajah</option>
+                                <option value='bariga'>Bariga</option>
+                                <option value='ebute-meta'>Ebute Meta</option>
+                                <option value='eti-osa'>Eti-Osa</option>
+                                <option value='festac'>FESTAC</option>
+                                <option value='gbagada'>Gbagada</option>
+                                <option value='ibeju-lekki'>Ibeju-Lekki</option>
+                                <option value='ifako-ijaye'>Ifako-Ijaye</option>
+                                <option value='ikeja'>Ikeja</option>
+                                <option value='ikorodu'>Ikorodu</option>
+                                <option value='ikoyi-obalende'>Ikoyi -Obalende</option>
+                                <option value='ilupeju'>Ilupeju</option>
+                                <option value='ketu'>Ketu</option>
+                                <option value='kosofe'>Kosofe</option>
+                                <option value='lagos-island'>Lagos Island</option>
+                                <option value='lagos-mainland'>Lagos Mainland</option>
+                                <option value='magodo'>Magodo</option>
+                                <option value='onipanu'>Onipanu</option>
+                                <option value='oshodi-isolo'>Oshodi-Isolo</option>
+                                <option value='somolu'>Somolu</option>
+                                <option value='surulere'>Surulere</option>
+                                <option value='victoria-island'>Victoria-Island</option>
+                                <option value='Others'>Others</option>
+                            </select>
+                        </div>
+                        <input type="hidden" name="page_no" id="page_no" value="1">
+                        <input class="btn student_button btn-sm" type="submit" value="Submit">
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>

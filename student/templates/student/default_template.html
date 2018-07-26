@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles%}
+{% load static %}
+{% load thumbnail %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="">
+    <meta name="description" content="">
+
+    <title>{% block title %}---------------{% endblock %} | Logeeks 'A'-Tutors</title>
+
+    <link href="{% static 'homepage/images/icon.png' %}" rel="icon" type="image/png">
+    <link rel="stylesheet" type="text/css" href="{% static 'homepage/bootstrap/css/font-awesome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'homepage/bootstrap/css/bootstrap-theme.css' %}">
+    <link rel="stylesheet" href="{% static 'homepage/bootstrap/css/bootstrap.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'homepage/css/dashboard.css' %}" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'homepage/css/logeeksatutors.css' %}">
+    <script src="{% static 'homepage/js/logeekstutors.js' %}"></script>
+    <script src="{% static 'homepage/bootstrap/jquery/jquery.js' %}"></script>
+    <script src="{% static 'homepage/bootstrap/js/bootstrap.js' %}"></script>
+
+    <style>
+        .student_button {
+            background-color: {{ request.user.student.choice_color }};
+            {% if request.user.student.choice_color.upper == "#FFFFFF" or request.user.student.choice_color.upper == "WHITE" or request.user.student.choice_color.upper == "#F7F7F7" %}
+                color: black;
+            {% else %}
+                color: white;
+            {% endif %}
+            text-shadow: 1px;
+            border: 1px solid black;
+        }
+        .student_color{
+            {% if request.user.student.choice_color.upper == "#FFFFFF" or request.user.student.choice_color.upper == "WHITE" or request.user.student.choice_color.upper == "#F7F7F7" %}
+                color: black;
+            {% else %}
+                color: white;
+            {% endif %}
+            background-color: {{ request.user.student.choice_color }};
+        }
+    </style>
+</head>
+
+<body style="background: white">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'homepage:index' %}"><img src="{% static 'homepage/images/logo.png' %}" height="90%" style="padding: 2px; padding-left: 15px;"></a>
+        </div>
+        <!-- Top Menu Items -->
+        <ul class="nav navbar-right top-nav">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i>
+                    {% block  notification_badge%}
+                    {% endblock %}<b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu alert-dropdown">
+                    <iframe src="/student/notification/" width="100%" style="border: none"></iframe>
+                </ul>
+            </li>
+            <li class="dropdown pull-right">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class=""><img class="img-rounded" src="{% static 'homepage/images/avatar.jpg' %}" height="18px"></i>
+                    <b>{{ request.user.first_name }}</b><i class="caret"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="/student/dashboard/"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="/student/account_settings/"><i class="fa fa-fw fa-gear"></i> Settings</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <form method="POST" action="{% url 'student:student_sign_out' %}">
+                          {% csrf_token %}
+                          <button class="form-control btn btn-xs btn-danger" type="submit" id="sign_out" name="sign_out">
+                              <span><i class="fa fa-power-off"></i></span> Logout
+                          </button>
+                        </form>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav side-nav">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#HireTutor" class="small"><i class="fa fa-fw fa-briefcase"></i> Hire tutor</a>
+                </li>
+                <li>
+                    <a href="/student/transaction_archive/" class="small"><i class="fa fa-fw fa-list"></i> Transactions</a>
+                </li>
+                <li>
+                    <a href="/student/science_world/" class="small"><i class="fa fa-fw fa-flask"></i> Science world</a>
+                </li>
+                <li>
+                    <a href="#" class="small"><i class="fa fa-fw fa-group"></i> Geeks forum (on fb)</a>
+                </li>
+                <li>
+                    <a href="#" class="small"><i class="fa fa-fw fa-book"></i> Learn advance</a>
+                </li>
+                <li>
+                    <a href="#" class="small"><i class="fa fa-fw fa-bullhorn"></i> News corner</a>
+                </li>
+                <li>
+                    <a href="{% url 'student:student_diary' %}" class="small"><i class="fa fa-fw fa-file-text-o"></i> My diary</a>                    </li>
+                <li>
+                    <a href="#" class="small"><i class="fa fa-fw fa-pencil"></i> Quick tests</a>
+                </li>
+                <li>
+                    <a href="#" data-toggle="collapse" class="small" data-target="#demo"><i class="fa fa-fw fa-flag"></i> Terms and policy <i class="fa fa-fw fa-caret-down"></i></a>
+                    <ul id="demo" class="collapse">
+                        <li>
+                            <a href="#" class="small"><i class="fa fa-fw fa-minus"></i> Agreement policy</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small"><i class="fa fa-fw fa-minus"></i> Refund policy</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small"><i class="fa fa-fw fa-minus"></i> Student policy</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="small"><i class="fa fa-fw fa-question-circle"></i> Help</a>
+                </li>
+                <li>
+                    <a href="#" class="small"><i class="fa fa-fw fa-reply"></i> Report a problem</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </nav>
+
+    <!-- Modal -->
+    <div class="modal fade" id="HireTutor" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header student_color">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title text-center student_color">Hire a Tutor</h2>
+                </div>
+                <div class="modal-body">
+                    <iframe src="/student/signed_in_student_select_tutor/" width="100%" height="300px"></iframe>
+                </div>
+                <div class="modal-footer student_color">
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <noscript>
+        <div class="well">
+            <div class="alert alert-danger">
+                <h4 class="text-center">Please enable JavaScript in order to have the webpage function properly.</h4>
+            </div>
+        </div>
+        <br><br>
+    </noscript>
+    <div id="wrapper">
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                {% block page_title_bar %}
+                    <div class="row">
+                        <div class="page-header">
+                            <h4 class="text-center"><b>{% block page_header %}{% endblock %}</b></h4>
+                        </div>
+                    </div>
+                {% endblock %}
+
+                {% block content %}
+
+                {% endblock %}
+                <br>
+
+                <footer style="background-color: white">
+                    <div class="row text-center">
+                        <br>
+                        <ul class="list-unstyled list-inline list-social-icons">
+                            <li>
+                                <a target="_blank" href="http://facebook.com/logeeksatutors" style="color: blue"><i class="fa fa-facebook-square fa-2x"></i></a>
+                            </li>
+                            <li>
+                                <a target="_blank" href="http://www.instagram.com/logeeksatutors1" style="color: saddlebrown"><i class="fa fa-instagram fa-2x"></i></a>
+                            </li>
+                            <li>
+                                <a target="_blank" href="http://twitter.com/logeeksatutors" style="color: cornflowerblue"><i class="fa fa-twitter-square fa-2x"></i></a>
+                            </li>
+                            <li>
+                                <a target="_blank" href="https://plus.google.com/u/0/106550624517671521485" style="color: red"><i class="fa fa-google-plus-square fa-2x"></i></a>
+                            </li>
+                        </ul>
+                        <br>
+                        <script type="text/javascript">
+                            <!--
+                            function text_respond() {
+                                document.getElementById("email").style.fontSize = "20px";
+                            }
+                            function text_resize() {
+                                document.getElementById("email").style.fontSize = "inherit"
+                            }
+                            //-->
+                        </script>
+                        <noscript>
+                            <div class="alert alert-danger">
+                                <h4 class="text-center">Enable JavaScript, please.</h4>
+                            </div>
+                        </noscript>
+                        <div  id="email" onmouseenter="text_respond()" onmouseleave="text_resize()">
+                            <a href="mailto:info@logeeksatutors.com"><i class="fa fa-envelope"></i> info@logeeksatutors.com</a>
+                        </div>
+                        <br>
+                        <div>
+                            <p class="fa fa-phone"></p>
+                            <a href="tel:+2347014096832"><b style="font-size: larger;">0701 409 6832</b></a>
+                            /
+                            <a href="tel:+2348172784571"><b style="font-size: larger;">0817 278 4571</b></a>
+                        </div>
+                        <p></p>
+                        <p style="color: gray;">&copy; Logeeks 'A'-Tutors (Scientific) 2017</p>
+                        <p>All Rights Reserved.</p>
+                        <br>
+                    </div>
+
+                </footer>
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+</body>
+</html>

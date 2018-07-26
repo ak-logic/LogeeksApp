@@ -1,0 +1,40 @@
+{% extends 'student/default_template.html' %}
+
+{% block title %}Student Diary {% endblock %}
+
+{% block page_header %}
+    {{ user.first_name }}'s Diary
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <script type="text/javascript">
+            function getNumberOfTextRemaining() {
+                var textSpaceUsed = (document.getElementById("student_diary_content").value).length;
+                var textSpaceRemaining = 1000 - textSpaceUsed;
+                document.getElementById("numberOfTextRemaining").innerHTML = textSpaceRemaining;
+            }
+        </script>
+
+        <p>...they say "A short pencil is better than a long memory". Meaning, learn to write down things; you can't afford to forget/lose vital info!</p>
+        {% if not diary_content %}
+            <p>Your Diary is currently empty. You can journal whatever you want and then click save</p>
+        {% endif %}
+        <div class="alert alert-warning">
+            <p>Your diary content cannot exceed 1000 characters. Remember to save when done.</p>
+        </div>
+        <p>Characters remaining: <b><span id="numberOfTextRemaining">---</span></b></p>
+
+        <form action="{% url 'student:student_diary' %}" method="POST">
+            {% csrf_token %}
+            <!--<label for="student_diary_content">Note</label>-->
+            <input type="submit" value="Save" class="btn student_button btn-sm">
+            <br>
+            <br>
+            <textarea class="form-control" id="student_diary_content" name="student_diary_content" rows="15"
+                      maxlength="1000" onfocus="getNumberOfTextRemaining()"
+                      onkeyup="getNumberOfTextRemaining()" draggable="false">{{ diary_content }}</textarea>
+            <br>
+        </form>
+    </div>
+{% endblock %}

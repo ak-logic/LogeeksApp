@@ -1,0 +1,9 @@
+{% extends 'tutor/default_template.html' %}
+
+    {% block title %}Tutor {{ request.user.username }}{% endblock %}
+
+{% block content %}
+    <a class="btn btn-primary" href="/tutor/dashboard/">Dashboard</a>
+    <br>
+    Tutor {{ request.user.username }} Transaction Archive.
+{% endblock %}

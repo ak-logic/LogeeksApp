@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles%}
+{% load static %}
+{% load thumbnail %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="">
+    <meta name="description" content="">
+
+    <title>Transaction {{ the_transaction.transaction_id }}| Logeeks 'A'-Tutors</title>
+
+    <link href="{% static 'homepage/images/icon.png' %}" rel="icon" type="image/png">
+    <link rel="stylesheet" type="text/css" href="{% static 'homepage/bootstrap/css/font-awesome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'homepage/bootstrap/css/bootstrap-theme.css' %}">
+    <link rel="stylesheet" href="{% static 'homepage/bootstrap/css/bootstrap.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'homepage/css/dashboard.css' %}" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'homepage/css/logeeksatutors.css' %}">
+    <script src="{% static 'homepage/js/logeekstutors.js' %}"></script>
+    <script src="{% static 'homepage/bootstrap/jquery/jquery.js' %}"></script>
+    <script src="{% static 'homepage/bootstrap/js/bootstrap.js' %}"></script>
+    <style>
+        .student_button {
+            background-color: {{ request.user.student.choice_color }};
+            {% if request.user.student.choice_color.upper == "#FFFFFF" or request.user.student.choice_color.upper == "WHITE" or request.user.student.choice_color.upper == "#F7F7F7" %}
+                color: black;
+            {% else %}
+                color: white;
+            {% endif %}
+            text-shadow: 1px;
+            border: 1px solid black;
+        }
+        .student_color{
+            {% if request.user.student.choice_color.upper == "#FFFFFF" or request.user.student.choice_color.upper == "WHITE" or request.user.student.choice_color.upper == "#F7F7F7" %}
+                color: black;
+            {% else %}
+                color: white;
+            {% endif %}
+            background-color: {{ request.user.student.choice_color }};
+        }
+    </style>
+</head>
+
+<body style="background: white;">
+    <div class="container">
+        <div class="row">
+            <a class="btn student_button btn-xs" target="_top" href="/student/dashboard/">Dashboard</a>
+        </div>
+        <h5>Transaction {{ the_transaction.transaction_id }}</h5>
+        <p>Date: {{ the_transaction.date_initialized }}</p>
+        <p>Tutor: {{ the_transaction.tutor_number }}</p>
+        <p>payment_status: {{ the_transaction.payment_status }}</p>
+        <p>Number of days per week: {{ the_transaction.num_of_days_per_week }} day(s)</p>
+        <p>Hours per day: {{ the_transaction.hours_per_day }} hour(s)</p>
+        <p>Total amount due: N{{ the_transaction.total_amount_due }}</p>
+        <br>
+        <button type="submit" class="btn student_button btn-sm">Print</button>
+        <button class="btn btn-default btn-sm">Report transaction</button>
+    </div>
+</body>
+</html>

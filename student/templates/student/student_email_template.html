@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Email Template | Logeeks 'A'-Tutors</title>
+</head>
+<body>
+    <p>Someone asked for password reset for email {{ email }}. Follow the link below: <br> {{ protocol}}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token %}</p>
+
+</body>
+</html>

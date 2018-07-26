@@ -1,0 +1,72 @@
+{% extends 'student/default_template.html' %}
+
+{% block title %}Transaction Archive{% endblock %}
+
+{% block page_header %}
+    Student {{ request.user.username }} transactions archive
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        id
+                    </th>
+                    <th>
+                        Tutor
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Amount due (N)
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trans in this_student_transactions %}
+                    <tr>
+                        <td>
+                            <a href="#" data-target="#view_individual_transaction_{{ trans.transaction_id }}" data-toggle="modal">{{ trans.transaction_id }}</a>
+                        </td>
+                        <td>{{ trans.tutor_number }}</td>
+                        <td>
+                        {% if trans.validated %}
+                            Confirmed
+                        {% else %}
+                            Pending
+                        {% endif %}
+                        </td>
+                        <td>N {{ trans.total_amount_due }}</td>
+                        <td>{{ trans.date_initialized }}</td>
+                    </tr>
+                    <!-- Modal for individual transaction -->
+                    <div class="modal fade" id="view_individual_transaction_{{ trans.transaction_id }}" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header student_color">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h2 class="modal-title student_color text-center">Transaction {{ trans.transaction_id }}</h2>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container-fluid">
+                                        <div class="col-xs-12">
+                                            <iframe id="transaction_modal_iframe" src="/student/transaction/{{ trans.transaction_id }}/" width="100%" height="400px" style="padding-top: 0px"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer label-primary student_color">
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
