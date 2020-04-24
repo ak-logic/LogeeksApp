@@ -212,7 +212,7 @@ def authenticating(request):
         else:
             error_message = 'Invalid student Info'
 
-    if request.GET:
+    if request.GET['next']:
         next_url = request.GET['next']
     else:
         next_url = '/student/dashboard/'
@@ -289,7 +289,7 @@ def student_reset_password(request):
             from_email = 'info@logeeksatutors.com'
             subject = 'Password reset link'
             message = 'Dear ' + str(user.first_name) + ', follow the link below to reset your password:\n' + \
-                      'localhost:8000/student/student_password_reset_confirm/' + str(uidb64) + '/' + str(token_generator)
+                      'http://logeeksatutors.com/student/student_password_reset_confirm/' + str(uidb64) + '/' + str(token_generator)
 
             send_mail(subject, message, from_email, [user_email])
 
@@ -310,13 +310,14 @@ def student_password_reset_done(request):
 
 def student_password_reset_confirm(request, uidb64=None, token=None,):
     logout(request)
-    recipient_username = uidb64
-    user = User.objects.get(username=properly_format_student_id(recipient_username))
-    token_generator = default_token_generator
-    if user is not None and token_generator.check_token(user, token):
-        link_is_valid = True
-        message = 'Successful!'
-    else:
+    try:
+        recipient_username = uidb64
+        user = User.objects.get(username=properly_format_student_id(recipient_username))
+        token_generator = default_token_generator
+        if user and token_generator.check_token(user, token):
+            link_is_valid = True
+            message = 'Valid link!'
+    except Exception:
         link_is_valid = False
         message = 'Failed! This link is invalid'
     context = {'link_is_valid': link_is_valid, 'message': message, 'student_id': recipient_username}
@@ -458,7 +459,8 @@ def student_change_photo(request):
                 new_profile_photo = request.FILES['new_profile_photo']
                 try:
                     if student.photo.url:
-                        default_storage.delete(student.photo.path)
+                        default_storage.delete(student.photo)
+                        default_storage.delete(student.cropping)
                 except Exception:
                     pass
                 student.photo = new_profile_photo

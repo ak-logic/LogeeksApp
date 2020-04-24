@@ -13,7 +13,7 @@ class Student(models.Model):
     middle_name = models.CharField(max_length=25, blank=True)
     gender = models.CharField(max_length=6)
     phone_number = models.CharField(max_length=18, blank=True)
-    home_address = models.CharField(max_length=90, blank=True)
+    home_address = models.CharField(max_length=100, blank=True)
     photo = ImageCropField(upload_to='media/student/', editable=True, blank=True)
     cropping = ImageRatioField('photo', '260x260', hide_image_field=True)
     email_verification = models.BooleanField(default=False)

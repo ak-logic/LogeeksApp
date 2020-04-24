@@ -6,7 +6,7 @@
 #coverage==4.0.3
 #decorator==4.0.10
 # Django==1.9.13
-Django==1.11.17
+django==1.11.17
 #django-appconf==1.0.1
 django-location-field
 django-image-cropping==1.0.4

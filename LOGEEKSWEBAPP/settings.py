@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'image_cropping',
     'captcha',
     'location_field.apps.DefaultConfig',
-    'dlf_app',
+    # 'dlf_app',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -100,8 +100,12 @@ WSGI_APPLICATION = 'LOGEEKSWEBAPP.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('LOGEEKS_DB_NAME'),
+        'USER': os.environ.get('LOGEEKS_DB_USER'),
+        'PASSWORD': os.environ.get('LOGEEKS_DB_PASSWORD'),
+        'HOST': os.environ.get('LOGEEKS_DB_HOST'),
+        'PORT': os.environ.get('LOGEEKS_DB_PORT'),
     }
 }
 
@@ -143,10 +147,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/akintade/Documents/Akintade/development/LOGEEKSATUTORS/WEB/LOGEEKSWEBAPP/static_files_folder/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_files_folder')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = '/home/akintade/Documents/Akintade/development/LOGEEKSATUTORS/WEB/LOGEEKSWEBAPP/media_files_folder/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'media_files_folder')
 
 
 LOCATION_FIELD = {'map.provider': 'google', }
