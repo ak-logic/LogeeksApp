@@ -203,7 +203,7 @@ def authenticating(request):
         password = request.POST['password']
         next_url = request.POST['next']
         student = authenticate(username=properly_format_student_id(student_id), password=password)
-        if student is not None:
+        if student:
             if student.is_active:
                 login(request, student)
                 return redirect(next_url)
