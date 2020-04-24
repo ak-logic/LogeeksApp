@@ -87,6 +87,7 @@ celerybeat-schedule
 .venv
 env/
 venv/
+*env/*
 ENV/
 env.bak/
 venv.bak/
@@ -106,6 +107,7 @@ venv.bak/
 
 # IDE / CODE EDITOR STUFF
 .idea/*
+.vscode/
 
 # STATIC MEDIA
 */static*
