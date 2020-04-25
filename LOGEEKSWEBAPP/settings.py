@@ -162,9 +162,6 @@ LOCATION_FIELD = {
         'provider.google.map.type': 'ROADMAP',
     }
 
-# GEOS_LIBRARY_PATH = 'C:/Users/h/Documents/LOGEEKSATUTORS/WEB/LOGEEKSWEBAPP/spatialite-2.0-win-libs/spatialite-2.0-win-libs/libgoes_c.a'
-# GEOS_LIBRARY_PATH = 'C:/Users/h/Documents/LOGEEKSATUTORS/WEB/LOGEEKSWEBAPP/spatialite-2.0-win-dlls/spatialite-2.0-win-dlls/libgeos_c-1.dll'
-# GEOS_LIBRARY_PATH = 'C:/Users/h/AppData/Local/Programs/Python/Python35-32/Lib/site-packages/django/contrib/gis/'
 
 # LOCATION_FIELD_PATH = settings.STATIC_URL + 'location_field'
 #
