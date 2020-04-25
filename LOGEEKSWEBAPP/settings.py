@@ -157,8 +157,8 @@ LOCATION_FIELD = {'map.provider': 'google', }
 LOCATION_FIELD = {'search.provider': 'google', }
 LOCATION_FIELD = {
         'provider.google.api': '//maps.google.com/maps/api/js?sensor=false',
-        'provider.google.api_key': 'AIzaSyA3B2inkHRotAlyygmJ7MTneCAjHYQaggo',
-        'provider.google.api_libraries': 'EmB0qQudEbj-W4H56FKBPbnKF34=',
+        'provider.google.api_key': os.environ.get('GOOGLE_API_KEY'),
+        'provider.google.api_libraries': os.environ.get('GOOGLE_API_LIB'),
         'provider.google.map.type': 'ROADMAP',
     }
 
