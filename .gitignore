@@ -106,7 +106,7 @@ venv.bak/
 .mypy_cache/
 
 # IDE / CODE EDITOR STUFF
-.idea/*
+.idea/
 .vscode/
 
 # STATIC MEDIA
